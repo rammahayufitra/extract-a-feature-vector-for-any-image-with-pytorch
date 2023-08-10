@@ -71,8 +71,14 @@ for image_path in glob.glob(os.path.join(image_directory, '*.png')):
         # Load and display the image using OpenCV
       
     image = cv2.imread(image_path)
+    
+    if status == "OK":
+         cv2.imwrite("./save/OK/"+f"{os.path.basename(image_path)}", image)
+    else:
+        cv2.imwrite("./save/NOT-OK/"+f"{os.path.basename(image_path)}", image)
+    
+    
     h,w,c = image.shape
-
     image = cv2.resize(image, (int(w/2), int(h/2)))
     cv2.imshow(f"{os.path.basename(image_path)}"+" | " + status + " | " + str(similarity_score), image)
     print("Similarity Score:", similarity_score)
