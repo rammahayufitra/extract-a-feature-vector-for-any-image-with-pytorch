@@ -1,9 +1,10 @@
 import cv2
 import numpy as np
 import glob
+import os
 
 # Mendapatkan daftar file gambar dalam direktori
-image_folder = './save/NOT-OK/*.png'
+image_folder = './save/OK/*.png'
 image_paths = glob.glob(image_folder)
 
 # Loop melalui setiap gambar
@@ -30,14 +31,14 @@ for image_path in image_paths:
         radius = circle[2]
 
         # Hitung koordinat bounding box
-        x = center[0] - radius
-        y = center[1] - radius
-        width = radius * 2
-        height = radius * 2
+        x = max(center[0] - radius, 0)
+        y = max(center[1] - radius, 0)
+        width = min(radius * 2, image.shape[1] - x)
+        height = min(radius * 2, image.shape[0] - y)
 
         # Gambar lingkaran dan bounding box pada gambar asli
-        cv2.circle(image, center, radius, (0, 255, 0), 4)
-        cv2.rectangle(image, (x, y), (x + width, y + height), (255, 0, 0), 2)  # Gambar bounding box
+        # cv2.circle(image, center, radius, (0, 255, 0), 4)
+        # cv2.rectangle(image, (x, y), (x + width, y + height), (255, 0, 0), 2)  # Gambar bounding box
 
         # Cetak koordinat bounding box
         print("Gambar:", image_path)
@@ -45,7 +46,18 @@ for image_path in image_paths:
 
         # Tampilkan gambar dengan lingkaran dan bounding box
         cv2.imshow(image_path, image)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
+        
+        # Crop gambar berdasarkan bounding box
+        try:       
+            cropped_image = image[y:y+height, x:x+width]
+            cv2.imwrite("./save/CROP-OK/"+f"{os.path.basename(image_path)}", cropped_image)
+
+            # Tampilkan gambar hasil cropping
+            cv2.imshow("Cropped Image", cropped_image)
+
+            cv2.waitKey(0)
+            cv2.destroyAllWindows()
+        except:
+            pass
     else:
         print("Tidak ditemukan lingkaran pada gambar:", image_path)

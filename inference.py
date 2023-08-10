@@ -47,10 +47,10 @@ def get_similarity_score(first_image, second_image):
     return similarity_score
 
 # Define the path of the reference image
-OK = './dataset/2.png'
+OK = './save/CROP-OK/2.png'
 
 # Define the directory containing the images to compare
-image_directory = './dataset/'
+image_directory = './save/CROP-OK/'
 
 # Load the reference image
 reference_image = load_image(OK)
