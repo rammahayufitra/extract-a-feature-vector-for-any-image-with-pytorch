@@ -1,6 +1,4 @@
-dataset/
 virtual-app/
-save/
 virtual-venv/
 venv/
 __pycache__/
