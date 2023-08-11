@@ -34,6 +34,6 @@ WORKDIR /app
 
 COPY . .
 
-RUN pip3 install -r requirements.txt
+RUN pip3 install torch torchvision opencv-python
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* && rm -rf *.whl && rm -rf *.txt

@@ -83,9 +83,9 @@ if __name__ == '__main__':
         image = detection(image)
         
         if status == "OK":
-            cv2.imwrite("./save/OK/"+f"{os.path.basename(image_path)}", image)
+            cv2.imwrite(SAVE_OK+f"{os.path.basename(image_path)}", image)
         else:
-            cv2.imwrite("./save/NOT-OK/"+f"{os.path.basename(image_path)}", image)
+            cv2.imwrite(SAVE_NOT_OK+f"{os.path.basename(image_path)}", image)
         
         
         h,w,c = image.shape
