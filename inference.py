@@ -7,6 +7,8 @@ import glob
 import os
 import cv2
 
+from circle_detection import detection
+
 # Load pre-trained VGG16 model
 vgg16 = torch.hub.load('pytorch/vision:v0.11.1', 'vgg16', pretrained=True)
 vgg16.classifier = nn.Sequential(*list(vgg16.classifier.children())[:-3])  # Remove the fully connected layers
@@ -46,41 +48,48 @@ def get_similarity_score(first_image, second_image):
 
     return similarity_score
 
-# Define the path of the reference image
-OK = './dataset/2.png'
+if __name__ == '__main__':
 
-# Define the directory containing the images to compare
-image_directory = './dataset/'
+    # Define the path of the reference image
+    OK = './dataset/2.png'
+    ARGUABLY_GOOD = './dataset/15.png'
 
-# Load the reference image
-reference_image = load_image(OK)
+    # Define the directory containing the images to compare
+    image_directory = './dataset/'
 
-# Iterate through images using glob
-for image_path in glob.glob(os.path.join(image_directory, '*.png')):
-    current_image = load_image(image_path)
-    
-    similarity_score = get_similarity_score(reference_image, current_image)
-    
-    if similarity_score >= 0.90:
-        print(f"{os.path.basename(image_path)}: OK")
-        status = "OK"
-    else:
-        print(f"{os.path.basename(image_path)}: NOT-OK")
-        status = "NOT-OK"
-    
-        # Load and display the image using OpenCV
-      
-    image = cv2.imread(image_path)
-    
-    if status == "OK":
-         cv2.imwrite("./save/OK/"+f"{os.path.basename(image_path)}", image)
-    else:
-        cv2.imwrite("./save/NOT-OK/"+f"{os.path.basename(image_path)}", image)
-    
-    
-    h,w,c = image.shape
-    image = cv2.resize(image, (int(w/2), int(h/2)))
-    cv2.imshow(f"{os.path.basename(image_path)}"+" | " + status + " | " + str(similarity_score), image)
-    print("Similarity Score:", similarity_score)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # Load the reference image
+    reference_image = load_image(OK)
+    reference_image_arguably_good = load_image(ARGUABLY_GOOD)
+
+    # Iterate through images using glob
+    for image_path in glob.glob(os.path.join(image_directory, '*.png')):
+        current_image = load_image(image_path)
+        
+        similarity_score = get_similarity_score(reference_image, current_image)
+        treshold_score = get_similarity_score(reference_image, reference_image_arguably_good)
+        
+        if similarity_score >= treshold_score:
+            print(f"{os.path.basename(image_path)}: OK")
+            status = "OK"
+        else:
+            print(f"{os.path.basename(image_path)}: NOT-OK")
+            status = "NOT-OK"
+        
+            # Load and display the image using OpenCV
+        
+        image = cv2.imread(image_path)
+
+        image = detection(image)
+        
+        if status == "OK":
+            cv2.imwrite("./save/OK/"+f"{os.path.basename(image_path)}", image)
+        else:
+            cv2.imwrite("./save/NOT-OK/"+f"{os.path.basename(image_path)}", image)
+        
+        
+        h,w,c = image.shape
+        image = cv2.resize(image, (int(w/2), int(h/2)))
+        cv2.imshow(f"{os.path.basename(image_path)}"+" | " + status + " | " + str(similarity_score), image)
+        print("Similarity Score:", similarity_score)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
