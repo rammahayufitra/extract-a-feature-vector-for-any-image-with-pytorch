@@ -7,7 +7,8 @@ import glob
 import os
 import cv2
 
-from circle_detection import detection
+from components.circle_detection import detection
+from components.config import *
 
 # Load pre-trained VGG16 model
 vgg16 = torch.hub.load('pytorch/vision:v0.11.1', 'vgg16', pretrained=True)
@@ -51,11 +52,11 @@ def get_similarity_score(first_image, second_image):
 if __name__ == '__main__':
 
     # Define the path of the reference image
-    OK = './dataset/2.png'
-    ARGUABLY_GOOD = './dataset/15.png'
+    OK = FILENAME_OK
+    ARGUABLY_GOOD = FILENAME_ARGUABLY_GOOD
 
     # Define the directory containing the images to compare
-    image_directory = './dataset/'
+    image_directory = PATH_DATASET
 
     # Load the reference image
     reference_image = load_image(OK)
