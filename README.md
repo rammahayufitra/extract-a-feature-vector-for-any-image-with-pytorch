@@ -10,8 +10,9 @@ B. Cara menjalankan aplikasi via zip <br>
 1. https://github.com/rammahayufitra/extract-a-feature-vector-for-any-image-with-pytorch
 2. cd ./extract-a-feature-vector-for-any-image-with-pytorch
 2. python3 -m venv virtual
-3. pip3 install -r requirements.txt
-4. python3 inference.py
+3. source virtual/venv/activate
+4. pip3 install -r requirements.txt
+5. python3 inference.py
 
 
 
